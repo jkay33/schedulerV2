@@ -12,13 +12,12 @@ let Appt = require('./appt.model');
 
 app.use(cors());
 app.use(bodyParser.json());
-
 // creating connection to db
-mongoose.connect('mongodb://127.0.0.1:27017/Appt', { useNewUrlParser: true });
+mongoose.connect('mongodb://mongo:27017/Appt', { useNewUrlParser: true });
 // saving instance of db connection to 'connection'
 const connection = mongoose.connection;
 
-connection.once('open', function () {
+connection.once('open', function() {
     console.log('Successfully connected to MongoDB');
 });
 // defining get request
@@ -119,8 +118,9 @@ apptRoutes.route('/find/asc/:min/:max').get(function (req, res) {
 apptRoutes.route('/gen/data/:num').post(function(req, res){
     // creating json array for insert
     jsonArr = [];
-    // loop create json array
+    // loop to create json array based on parameter from route
     for (i = 1; i <= req.params.num; i++) {
+        // using faker to generate fake data
         let fakename = faker.name.firstName();
         let fakedate = faker.date.past(1);
         let fakestatus = faker.random.arrayElement([
@@ -129,6 +129,7 @@ apptRoutes.route('/gen/data/:num').post(function(req, res){
             'complete'
         ]);
         let fakeprice = faker.random.number(40);
+        // pushing data to jsonArr every iteration
         jsonArr.push({
             requestor_name: fakename,
             appt_date: fakedate,
