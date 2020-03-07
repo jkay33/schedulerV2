@@ -33,7 +33,7 @@ apptRoutes.route('/').get(function(req, res){
 });
 // defining get request by id ( retrieve specific )
 apptRoutes.route('/:id').get(function(req, res){
-    // set id = id from url
+    // set id = id from parameter (":id")
     let id = req.params.id;
     // get item by id
     Appt.findById(id, function(err, appt){
@@ -137,6 +137,7 @@ apptRoutes.route('/gen/data/:num').post(function(req, res){
             appt_price: fakeprice
         });
     };
+    // insert jsonArr 
     Appt.insertMany(jsonArr,function(err, appt){
         if (err){
             res.send(err);
