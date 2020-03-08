@@ -26,6 +26,13 @@ Route “/:id” is defined as GET:
 Route “/create” is defined as POST:
 	-This route will create the record in the database.
 	-Follow the DB model design to avoid any errors.
+	-Body example (json): 
+		{
+			"requestor_name": "name",
+			"appt_date": "date",
+			"appt_status": "status",
+			"appt_price": "price"
+		}
 Route “/update/:id” is defined as PUT:
 	-This route will update the ID specified in the request parameter.
 Route “/delete/:id” is defined as DELETE:
