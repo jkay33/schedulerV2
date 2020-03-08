@@ -12,7 +12,7 @@ let Appt = require('./appt.model');
 
 app.use(cors());
 app.use(bodyParser.json());
-// creating connection to db
+// creating connection to db, using new url parser due to deprecation
 mongoose.connect('mongodb://mongo:27017/Appt', { useNewUrlParser: true });
 // saving instance of db connection to 'connection'
 const connection = mongoose.connection;
@@ -37,7 +37,11 @@ apptRoutes.route('/:id').get(function(req, res){
     let id = req.params.id;
     // get item by id
     Appt.findById(id, function(err, appt){
-        res.json(appt);
+        if (err){
+            return console.log(err);
+        }else{
+            res.json(appt);
+        }
     });
 });
 // defining post request ( create appointments )
@@ -76,7 +80,8 @@ apptRoutes.route('/update/:id').put(function (req, res){
 apptRoutes.route('/delete/:id').delete(function(req, res){
     Appt.findByIdAndDelete(req.params.id, function(err, appt){
         if (err){
-            return console.log(err);
+            //handling deletion error
+            return res.status(400).send('delete attempt failed');
         }else {
             return res.send('deleted');
         };
