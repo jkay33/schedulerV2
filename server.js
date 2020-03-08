@@ -38,9 +38,9 @@ apptRoutes.route('/:id').get(function(req, res){
     // get item by id
     Appt.findById(id, function(err, appt){
         if (err){
-            return console.log(err);
-        }else{
-            res.json(appt);
+            return res.status(400).send('not found');
+        }else {
+            return res.json(appt);
         }
     });
 });
@@ -62,7 +62,7 @@ apptRoutes.route('/update/:id').put(function (req, res){
     Appt.findById(req.params.id, function (err, appt){
         //if id not found 
         if (!appt){
-            res.status(404).send('not found');
+            res.status(404).send(err);
         } else{
             //set status = request
             appt.appt_status = req.body.appt_status;
