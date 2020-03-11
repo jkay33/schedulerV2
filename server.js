@@ -26,7 +26,7 @@ apptRoutes.route('/').get(function(req, res){
         if (err){
             return console.log(err);
         }else {
-            //serve json file
+            //serve json file, res default set to 200
             return res.json(appts);
         }
     });
@@ -40,6 +40,7 @@ apptRoutes.route('/:id').get(function(req, res){
         if (err){
             return res.status(400).send('not found');
         }else {
+            // res set to 200 by default
             return res.json(appt);
         }
     });
@@ -62,7 +63,7 @@ apptRoutes.route('/update/:id').put(function (req, res){
     Appt.findById(req.params.id, function (err, appt){
         //if id not found 
         if (!appt){
-            res.status(404).send(err);
+            return res.status(404).send(err);
         } else{
             //set status = request
             appt.appt_status = req.body.appt_status;
@@ -145,9 +146,9 @@ apptRoutes.route('/gen/data/:num').post(function(req, res){
     // insert jsonArr 
     Appt.insertMany(jsonArr,function(err, appt){
         if (err){
-            res.send(err);
+            return res.status(400).send(err);
         }else {
-            res.status(200).send('complete');
+            return res.status(200).send('complete');
         };
     });
 });
