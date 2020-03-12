@@ -6,27 +6,32 @@ const mongoose = require('mongoose');
 const faker = require('faker');
 const apptRoutes = express.Router();
 const PORT = 4000;
+const DB_URI = 'mongodb://mongo:27017/Appt';
+const DB_URI_TEST = 'mongodb://127.0.0.1:27017/Appt';
 
 // import model
 let Appt = require('./appt.model');
 
 app.use(cors());
 app.use(bodyParser.json());
+
 // creating connection to db, using new url parser due to deprecation
-mongoose.connect('mongodb://mongo:27017/Appt', { useNewUrlParser: true });
+mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 // saving instance of db connection to 'connection'
 const connection = mongoose.connection;
 
 connection.once('open', function() {
     console.log('Successfully connected to MongoDB');
 });
+
+
 // defining get request
 apptRoutes.route('/').get(function(req, res){
     Appt.find(function(err, appts){
         if (err){
             return console.log(err);
         }else {
-            //serve json file, res default set to 200
+            //serve json file
             return res.json(appts);
         }
     });
@@ -159,3 +164,5 @@ app.use('/appt', apptRoutes);
 app.listen(PORT, function(){
     console.log ("Backend Server is runnning on PORT: " + PORT);
 });
+
+module.exports = app;
